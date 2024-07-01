@@ -15,18 +15,20 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.sayHello = void 0;
 const axios_1 = __importDefault(require("axios"));
 const getIp_utils_1 = require("../utils/getIp.utils");
+const myApiKey = 'aaac1450c370507a325bb559024a67c5';
 const sayHello = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // const userIp = req.ip
     const userIp = (0, getIp_utils_1.getIp)(req);
     const userName = req.query.visitors_name;
     try {
-        console.log(userIp);
-        const userLocation = yield axios_1.default.get(`http://ip-api.com/json/102.91.49.211`);
-        // console.log(userLocation)
+        console.log(userIp, "sent a request");
+        const { data } = yield axios_1.default.get(`http://ip-api.com/json/102.91.49.211`);
+        // console.log(data)
+        const { data: weather } = yield axios_1.default.get(`http://api.weatherapi.com/v1/current.json?key=866195130645470aa6d132613240107&q=${data.city}`);
         const resObj = {
             clientIp: userIp,
-            location: userLocation.data.city,
-            greeting: `hello ${userName}`
+            location: data.city,
+            greeting: `hello ${userName}!, the current weather is, ${weather.current.temp_c} degrees celcius in ${data.city}`,
         };
         res.status(200).json(resObj);
     }

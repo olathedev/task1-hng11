@@ -11,15 +11,16 @@ export const sayHello = async (req: Request, res: Response) => {
     const userName = req.query.visitors_name
 
     try {
-        console.log(userIp)
+        console.log(userIp, "sent a request")
+
         const {data} = await axios.get(`http://ip-api.com/json/102.91.49.211`)
         // console.log(data)
-        const getwWeather: any = await axios.get(`http://api.weatherapi.com/v1/current.json?key=866195130645470aa6d132613240107&q=${data.city}`)
+        const {data: weather}: any = await axios.get(`http://api.weatherapi.com/v1/current.json?key=866195130645470aa6d132613240107&q=${data.city}`)
         
         const resObj = {
             clientIp: userIp,
             location: data.city,
-            greeting: `hello ${userName} the current weather is, ${getwWeather.data.current.temp_c}`,
+            greeting: `hello ${userName}!, the current weather is, ${weather.current.temp_c} degrees celcius in ${data.city}`,
         }
 
         res.status(200).json(resObj)
