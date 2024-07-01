@@ -6,7 +6,7 @@ import { getIp } from "../utils/getIp.utils";
 export const sayHello = async (req: Request, res: Response) => {
     // const userIp = req.ip
     const userIp = getIp(req)
-    const userName = req.query.visitors_name
+    const userName = req.query.visitors_name || "anonymous user"
 
     try {
         console.log(userIp, "sent a request")
@@ -16,7 +16,7 @@ export const sayHello = async (req: Request, res: Response) => {
         const {data: weather}: any = await axios.get(`http://api.weatherapi.com/v1/current.json?key=${process.env.WEATHER_KEY}&q=${data.city}`)
         
         const resObj = {
-            clientIp: userIp,
+            client_ip: userIp,
             location: data.city,
             greeting: `Hello, ${userName}!, the current weather is, ${weather.current.temp_c} degrees Celcius in ${data.city}`,
         }
