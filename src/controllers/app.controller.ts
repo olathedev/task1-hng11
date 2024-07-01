@@ -13,7 +13,7 @@ export const sayHello = async (req: Request, res: Response) => {
     try {
         console.log(userIp, "sent a request")
 
-        const {data} = await axios.get(`http://ip-api.com/json/102.91.49.211`)
+        const {data} = await axios.get(`http://ip-api.com/json/${userIp}`)
         // console.log(data)
         const {data: weather}: any = await axios.get(`http://api.weatherapi.com/v1/current.json?key=866195130645470aa6d132613240107&q=${data.city}`)
         
