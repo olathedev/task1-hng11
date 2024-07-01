@@ -14,3 +14,4 @@ app.use((req, res) => {
 app.listen(port, () => {
     console.log("server is listening on port 3000");
 });
+exports.default = app;
