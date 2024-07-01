@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import axios from "axios"
 
 export const sayHello = async (req: Request, res: Response) => {
     const userIp = req.socket.remoteAddress
@@ -6,16 +7,20 @@ export const sayHello = async (req: Request, res: Response) => {
 
     try {
         console.log(userIp)
-        const userLocation = await fetch(`https://api.ip-api.com/json/${userIp}?fields=city,country`)
+        const userLocation = await axios.get(`http://ip-api.com/json/${userIp}`)
+        console.log(userLocation)
 
         const resObj = {
             clientIp: userIp,
-            location: userLocation,
-            greeting: `hello ${userName}`
+            location: userLocation.data.city,
+            greeting: `hello ${userName} the temprature is 11 in ${userLocation.data.city}`
         }
 
         res.status(200).json(resObj)
-    } catch (error) {
+    } catch (error: any) {
         console.log(error)
+        res.status(400).json({
+            message: error.message
+        })
     }
 }
