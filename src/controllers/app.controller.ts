@@ -1,33 +1,21 @@
 import { Request, Response } from "express";
 import axios from "axios"
-
-
-interface ExtendedRequest extends Request {
-    headers: {
-        'x-forwarded-for'?: string;
-    };
-}
+import { getIp } from "../utils/getIp.utils";
 
 export const sayHello = async (req: Request, res: Response) => {
+    // const userIp = req.ip
+    const userIp = getIp(req)
     const userName = req.query.visitors_name
-    const forwardedIPs: any = req.headers['x-forwarded-for'];
-    let userIP: string | undefined;
 
-    if (forwardedIPs) {
-        // Extract the first IP from the comma-separated list (assuming the first is the user's)
-        userIP = forwardedIPs.split(',')[0];
-    } else {
-        userIP = req.ip; // Fallback to req.ip if no X-Forwarded-For header
-    }
     try {
-        console.log(userIP)
-        const userLocation = await axios.get(`http://ip-api.com/json/${userIP}`)
-        console.log(userLocation)
+        console.log(userIp)
+        const userLocation = await axios.get(`http://ip-api.com/json/102.91.49.211`)
+        // console.log(userLocation)
 
         const resObj = {
-            clientIp: userIP,
+            clientIp: userIp,
             location: userLocation.data.city,
-            greeting: `hello ${userName} the temprature is 11 in ${userLocation.data.city}`
+            greeting: `hello ${userName}`
         }
 
         res.status(200).json(resObj)

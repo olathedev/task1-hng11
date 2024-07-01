@@ -14,17 +14,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sayHello = void 0;
 const axios_1 = __importDefault(require("axios"));
+const getIp_utils_1 = require("../utils/getIp.utils");
 const sayHello = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const userIp = req.socket.remoteAddress;
+    // const userIp = req.ip
+    const userIp = (0, getIp_utils_1.getIp)(req);
     const userName = req.query.visitors_name;
     try {
         console.log(userIp);
-        const userLocation = yield axios_1.default.get(`http://ip-api.com/json/${userIp}`);
-        console.log(userLocation);
+        const userLocation = yield axios_1.default.get(`http://ip-api.com/json/102.91.49.211`);
+        // console.log(userLocation)
         const resObj = {
             clientIp: userIp,
             location: userLocation.data.city,
-            greeting: `hello ${userName} the temprature is 11 in ${userLocation.data.city}`
+            greeting: `hello ${userName}`
         };
         res.status(200).json(resObj);
     }
